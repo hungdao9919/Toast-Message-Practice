@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="http://fonts.cdnfonts.com/css/roboto" rel="stylesheet">
+                
+    <link rel="stylesheet" href="./assests/css/style.css">
+                
+
+    <title>Toast Message Practice</title>
+</head>
+<body>
+<div id="toast"></div>
+<div class="container">
+    <div onclick="showSuccess();" class="btn btn-show-success">Show success</div>
+    <div onclick="showError();" class="btn btn-show-error">Show error</div>
+    <div onclick="showWarning();" class="btn btn-show-warning">Show warning</div>
+    <div onclick="showInfor();" class="btn btn-show-infor">Show infor</div>
+</div>
+   
+   <script>
+    function toast(
+        {type = "", title = "", message = "", duration = 3000}
+    )
+    {
+           
+        const mainToast = document.getElementById('toast');
+
+        if(mainToast){
+            const toast = document.createElement('div');
+
+        const autoRemove =setTimeout(function(){
+            mainToast.removeChild(toast);
+        },duration + 1000)
+
+        toast.onclick = function(e){
+           if(e.target.closest('.toast__close')){
+               mainToast.removeChild(toast);
+               clearTimeout(autoRemove);
+           }
+        };
+        
+        const icons ={
+            error: 'fa-bug',
+            success:'fa-circle-check',
+            infor:'fa-circle-info',
+            warning:'fa-circle-exclamation'
+        };
+
+        const icon = icons[type];
+        const delay = (duration / 1000).toFixed(2);
+
+        toast.classList.add("toast",`toast--${type}`);
+        toast.style.animation = `slideOut ease .3s, fadeOut linear 1s ${delay}s forwards`;
+
+        toast.innerHTML = `
+                        <div class="toast__icon">
+                            <i class="fa-solid ${icon}"></i>
+                        </div>
+                        <div class="toast__body">
+                            <h3 class="toast__title">${title}</h3>
+                            <p class="toast__message">${message}</p>
+                        </div>
+                        <div class="toast__close">
+                            <i class="fa-solid fa-xmark"></i>
+                        </div>
+                        `;
+
+        mainToast.appendChild(toast);
+        }
+        
+    }
+       
+
+    function showSuccess(){
+        toast({
+        type : 'success',
+        title:'Chúc mừng bạn đã thành công',
+        message: 'Chào mừng bạn đã đến với website của chúng tôi',
+        duration : 3000
+    })
+    }
+    function showError(){
+        toast({
+        type : 'error',
+        title:'Lỗi!!!',
+        message: 'Mời bạn F5 lại để reload lại trang, Mời bạn F5 lại để reload lại trang',
+        duration : 3000
+    })
+    }
+    function showWarning(){
+        toast({
+        type : 'warning',
+        title:'Cảnh báo',
+        message: 'Nguy hiểm, cẩn thận bị đánh cắp dữ liệu',
+        duration : 3000
+    })
+    }
+    function showInfor(){
+        toast({
+        type : 'infor',
+        title:'Thông tin liên hệ',
+        message: 'Bạn vui lòng gọi +84123 45445 hoặc support@domain.com để biết thêm thông tin chi tiết',
+        duration : 3000
+    })
+    }
+   </script>
+</body>
+</html>
